@@ -40,7 +40,6 @@ ylabel('Microchip Test 2')
 legend('y = 1', 'y = 0')
 hold off;
 
-
 %% =========== Part 1: Regularized Logistic Regression ============
 %  In this part, you are given a dataset with data points that are not
 %  linearly separable. However, you would still like to use logistic
@@ -55,10 +54,11 @@ hold off;
 
 % Note that mapFeature also adds a column of ones for us, so the intercept
 % term is handled
+ % 118*28
 X = mapFeature(X(:,1), X(:,2));
 
 % Initialize fitting parameters
-initial_theta = zeros(size(X, 2), 1);
+initial_theta = zeros(size(X, 2), 1); % 28*1
 
 % Set regularization parameter lambda to 1
 lambda = 1;

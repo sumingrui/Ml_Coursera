@@ -14,15 +14,20 @@ hold on
 
 if size(X, 2) <= 3
     % Only need 2 points to define a line, so choose two endpoints
+    % 注意：
+    % 决策边界已经由 theta(1)+theta(2)*x1+theta(3)*x2 决定了，plot_x只是确定把横轴上的范围能够包裹住所有
+    % 数据集，然后用fminunc计算出来的theta求得对应值，画出直线。
+
     plot_x = [min(X(:,2))-2,  max(X(:,2))+2];
 
     % Calculate the decision boundary line
-    plot_y = (-1./theta(3)).*(theta(2).*plot_x + theta(1));
+    plot_y = (-1./theta(3)).*(theta(2).*plot_x +theta(1));
 
     % Plot, and adjust axes for better viewing
     plot(plot_x, plot_y)
     
     % Legend, specific for the exercise
+    % 按照顺序赋值给绘制对象
     legend('Admitted', 'Not admitted', 'Decision Boundary')
     axis([30, 100, 30, 100])
 else
@@ -31,6 +36,7 @@ else
     v = linspace(-1, 1.5, 50);
 
     z = zeros(length(u), length(v));
+    
     % Evaluate z = theta*x over the grid
     for i = 1:length(u)
         for j = 1:length(v)

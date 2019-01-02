@@ -11,11 +11,13 @@ function out = mapFeature(X1, X2)
 %
 
 degree = 6;
-out = ones(size(X1(:,1)));
+out = ones(size(X1(:,1))); %118*1
+
+% 给第一列ones，然后创建新列 次数不超过6
 for i = 1:degree
     for j = 0:i
         out(:, end+1) = (X1.^(i-j)).*(X2.^j);
     end
 end
-
+% 118*28
 end
