@@ -36,9 +36,11 @@ load('ex3data1.mat'); % training data stored in arrays X, y
 m = size(X, 1);
 
 % Randomly select 100 data points to display
+% 打乱行数，输出前面100行
 rand_indices = randperm(m);
 sel = X(rand_indices(1:100), :);
-
+size(sel)
+pause;
 displayData(sel);
 
 fprintf('Program paused. Press enter to continue.\n');
