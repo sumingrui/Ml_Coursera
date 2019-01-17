@@ -34,13 +34,10 @@ fprintf('Loading and Visualizing Data ...\n')
 
 load('ex3data1.mat'); % training data stored in arrays X, y
 m = size(X, 1);
-
 % Randomly select 100 data points to display
 % 打乱行数，输出前面100行
 rand_indices = randperm(m);
-sel = X(rand_indices(1:100), :);
-size(sel)
-pause;
+sel = X(rand_indices(1:100), :); % 100*400
 displayData(sel);
 
 fprintf('Program paused. Press enter to continue.\n');
@@ -58,7 +55,7 @@ pause;
 fprintf('\nTesting lrCostFunction() with regularization');
 
 theta_t = [-2; -1; 1; 2];
-X_t = [ones(5,1) reshape(1:15,5,3)/10];
+X_t = [ones(5,1) reshape(1:15,5,3)/10]; % 5*4
 y_t = ([1;0;1;0;1] >= 0.5);
 lambda_t = 3;
 [J grad] = lrCostFunction(theta_t, X_t, y_t, lambda_t);
@@ -76,8 +73,7 @@ pause;
 fprintf('\nTraining One-vs-All Logistic Regression...\n')
 
 lambda = 0.1;
-[all_theta] = oneVsAll(X, y, num_labels, lambda);
-
+[all_theta] = oneVsAll(X, y, num_labels, lambda); % 5000*400 5000*1 10 0.1s
 fprintf('Program paused. Press enter to continue.\n');
 pause;
 
