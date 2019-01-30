@@ -165,17 +165,20 @@ pause;
 %
 
 lambda = 0;
+% X_poly是特征缩放之后的特征值，可以快速梯度下降，求得theta值
 [theta] = trainLinearReg(X_poly, y, lambda);
 
 % Plot training data and fit
 figure(1);
 plot(X, y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
+% 根据theta绘制曲线，要将X转换成对应的特征缩放之后的值
 plotFit(min(X), max(X), mu, sigma, theta, p);
 xlabel('Change in water level (x)');
 ylabel('Water flowing out of the dam (y)');
 title (sprintf('Polynomial Regression Fit (lambda = %f)', lambda));
 
 figure(2);
+% X_poly完全拟合了，所以基本上没有误差
 [error_train, error_val] = ...
     learningCurve(X_poly, y, X_poly_val, yval, lambda);
 plot(1:m, error_train, 1:m, error_val);
@@ -217,4 +220,44 @@ for i = 1:length(lambda_vec)
 end
 
 fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+[theta1] = trainLinearReg(X_poly, y, 3);
+test_error = linearRegCostFunction(X_poly_test, ytest, theta1, 0);
+fprintf('test_error = %f\n', test_error);
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+% step1: 从训练集中随机选择i个示例，并从交叉验证集中随机选择i个示例
+% step2：学习参数theta
+% step3：用随机训练集和交叉验证集评估theta
+% step4：重复50次
+
+d = size(X_poly,1);
+train_error = zeros(m,1);
+val_error = zeros(m,1);
+train_num = zeros(m,1);
+for n = 1:50
+    sel = randperm(size(X_poly,1));
+    tempx = X_poly(sel,:);
+    tempy = y(sel,:);
+    i = unidrnd(size(X_poly,1));
+    tempx = tempx(1:i,:);
+    tempy = tempy(1:i,:);
+    train_num(i) = train_num(i)+1;
+    [thetai] = trainLinearReg(tempx, tempy, 0.01);
+    train_error(i) = train_error(i) + linearRegCostFunction(tempx, tempy, thetai, 0);
+    val_error(i) = val_error(i) + linearRegCostFunction(X_poly_val, yval, thetai, 0);
+end
+
+train_error = train_error ./ train_num;
+val_error = val_error ./ train_num;
+plot(1:d, train_error, 1:d, val_error);
+
+title(sprintf('Polynomial Regression Learning Curve (lambda = %f)', 0.01));
+xlabel('Number of training examples')
+ylabel('Error')
+axis([0 13 0 100])
+legend('Train', 'Cross Validation')
 pause;
