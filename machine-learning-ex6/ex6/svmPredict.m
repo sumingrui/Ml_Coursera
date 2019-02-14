@@ -9,6 +9,7 @@ function pred = svmPredict(model, X)
 
 % Check if we are getting a column vector, if so, then assume that we only
 % need to do prediction for a single example
+% 预测是不是列向量，如果是的，则要将其进行转置，变成行向量
 if (size(X, 2) == 1)
     % Examples should be in rows
     X = X';
@@ -19,10 +20,16 @@ m = size(X, 1);
 p = zeros(m, 1);
 pred = zeros(m, 1);
 
-if strcmp(func2str(model.kernelFunction), 'linearKernel')
+% 取核函数名称 看是否是线性核函数
+% func2str 将函数句柄转换成字符串
+if strcmp(func2str(model.kernelFunction), 'linearKernel') 
     % We can use the weights and bias directly if working with the 
     % linear kernel
+    % X: m*2 w: 2*1 
+    % w: weights bias: b
     p = X * model.w + model.b;
+
+% 取核函数名称 看是否是高斯核函数
 elseif strfind(func2str(model.kernelFunction), 'gaussianKernel')
     % Vectorized RBF Kernel
     % This is equivalent to computing the kernel on every pair of examples

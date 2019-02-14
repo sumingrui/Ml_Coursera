@@ -48,8 +48,8 @@ x = zeros(n, 1);
 %
 %
 
-
-
+% 消除重复的
+x(word_indices) = 1;
 
 
 

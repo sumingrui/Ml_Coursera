@@ -5,7 +5,7 @@ function word_indices = processEmail(email_contents)
 %   the body of an email and returns a list of indices of the 
 %   words contained in the email. 
 %
-
+% 得到单词索引，如果碰到不在vocabList中的单词，则选择跳过
 % Load Vocabulary
 vocabList = getVocabList();
 
@@ -21,10 +21,10 @@ word_indices = [];
 % hdrstart = strfind(email_contents, ([char(10) char(10)]));
 % email_contents = email_contents(hdrstart(1):end);
 
-% Lower case
+% Lower case 转小写
 email_contents = lower(email_contents);
 
-% Strip all HTML
+% Strip all HTML 正则表达式对字符串进行查找替换
 % Looks for any expression that starts with < and ends with > and replace
 % and does not have any < or > in the tag it with a space
 email_contents = regexprep(email_contents, '<[^<>]+>', ' ');
@@ -57,6 +57,7 @@ l = 0;
 while ~isempty(email_contents)
 
     % Tokenize and also get rid of any punctuation
+    % 跳过标点符号取第一个词
     [str, email_contents] = ...
        strtok(email_contents, ...
               [' @$/#.-:&*+=[]?!(){},''">_<;%' char(10) char(13)]);
@@ -97,10 +98,9 @@ while ~isempty(email_contents)
     %       str2). It will return 1 only if the two strings are equivalent.
     %
 
-
-
-
-
+    if length(i = find(strcmp(vocabList,str))) != 0
+        word_indices = [word_indices;i];
+    end
 
 
 
@@ -118,7 +118,6 @@ while ~isempty(email_contents)
     l = l + length(str) + 1;
 
 end
-
 % Print footer
 fprintf('\n\n=========================\n');
 
